@@ -1,7 +1,7 @@
 section .data	
-	msg1 db 10,13,"Enter 5 64 bit numbers"
+	msg1 db 10,13,"Enter 5 64 bit numbers: "
 	len1 equ $-msg1
-	msg2 db 10,13,"Entered 5 64 bit numbers"
+	msg2 db 10,13,"Entered 5 64 bit numbers- "
 	len2 equ $-msg2
 
 section .bss
