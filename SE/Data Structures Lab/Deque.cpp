@@ -1,5 +1,6 @@
 #include<iostream>
 using namespace std;
+
 #define SIZE 10
 
 template<class T>
