@@ -1,4 +1,3 @@
-
 def accept_array(A): 
    n = int(input("Enter the total no. of student : "))
    for i in range(n):
