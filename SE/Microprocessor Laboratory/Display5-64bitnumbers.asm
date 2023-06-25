@@ -45,6 +45,7 @@ mov rbx,00
 ;display
 mov byte[counter],05
 mov rbx,00
+
 		loop2: 
 			mov rax,1                    ;1 for write 
 			mov rdi, 1                    ;1 for monitor
