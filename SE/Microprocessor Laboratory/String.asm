@@ -3,7 +3,7 @@ section .data
 	len1 equ $-msg1
 
 section .bss
-	str1 resb 200                 ;string declaration
+	str1 resb 200
 	result resb 16
 
 section .text
