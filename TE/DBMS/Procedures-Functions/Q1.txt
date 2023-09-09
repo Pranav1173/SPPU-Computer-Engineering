@@ -1,1 +1,34 @@
+Q1. Write a stored function in PL/SQL for given requirement and use the same in PL/SQL block.
+Account no. and branch name will be accepted from user. The same will be searched in table acct_details. If status of account is active then display appropriate message and also store the account details in active_acc_details table, otherwise display message on screen “account is inactive”.
 
+
+
+Code:
+
+CREATE OR REPLACE FUNCTION ACTACC(ACNO IN NUMBER, BRAN IN VARCHAR)
+RETURN VARCHAR
+IS 
+BEGIN
+    DECLARE 
+        ST VARCHAR(10);
+        BR VARCHAR(30);
+    BEGIN 
+        SELECT STATUS INTO ST FROM ACCT_DETAILS WHERE ACC_NO = ACNO;
+        SELECT BRANCH INTO BR FROM ACCT_DETAILS WHERE BRANCH = BRAN;
+        IF (ST = 'ACTIVE') THEN
+            INSERT INTO ACTIVE_ACC_DETAILS VALUES(ACNO,BRAN);
+        END IF;
+        RETURN ST;
+    END;
+END;
+
+
+DECLARE
+    AC_N NUMBER := &ACCOUNTNUMBER;
+    BR VARCHAR(20) := '&BRANCHNAME'; -- Use single quotes to indicate a string value
+    STA VARCHAR(10);
+BEGIN
+    STA := ACTACC(AC_N, BR);
+    DBMS_OUTPUT.PUT_LINE('Account Status: ' || STA);
+END;
+/
