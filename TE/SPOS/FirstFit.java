@@ -25,4 +25,13 @@ class FirstFit {
             System.out.println();
         }
     }
+    public static void main(String[] args) {
+        FirstFit firstFit = new FirstFit();
+        int blockSize[] = {100, 500, 200, 300, 600};
+        int processSize[] = {212, 417, 112, 426};
+        int m = blockSize.length;
+        int n = processSize.length;
+
+        firstFit.firstFit(blockSize, m, processSize, n);
+    }
 }
