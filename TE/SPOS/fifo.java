@@ -1,54 +1,38 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.*;
 
 public class fifo {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int frames, pointer = 0, hit = 0, fault = 0, ref_len;
-        int buffer[];
-        int reference[];
-        int mem_layout[][];
-        System.out.println("Please enter the number of Frames:");
-        frames = Integer.parseInt(br.readLine());
-        System.out.println("Please enter the length of the Reference string:");
-        ref_len = Integer.parseInt(br.readLine());
-        reference = new int[ref_len];
-        mem_layout = new int[ref_len][frames];
-        buffer = new int[frames];
-        for (int j = 0; j < frames; j++) buffer[j] = -1;
-        System.out.println("Please enter the reference string:");
-        for (int i = 0; i < ref_len; i++) {
-            reference[i] = Integer.parseInt(br.readLine());
-        }
-
-        System.out.println();
-        for (int i = 0; i < ref_len; i++) {
-            int search = -1;
-            for (int j = 0; j < frames; j++) {
-                if (buffer[j] == reference[i]) {
-                    search = j;
-                    hit++;
-                    break;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        // Prompt the user for the number of frames
+        System.out.print("Enter the number of frames: ");
+        int n = sc.nextInt();
+        
+        // Initialize variables
+        int p, i = 0, f = 0, h = 0;
+        int[] q = new int[n];
+        Set<Integer> s = new HashSet<>();
+        
+        // Prompt the user for the reference string
+        System.out.println("Enter the reference string (enter -1 to stop):");
+        
+        // Read reference string until the user enters -1
+        while ((p = sc.nextInt()) != -1) {
+            if (!s.contains(p)) {
+                if (s.size() == n) {
+                    s.remove(q[i % n]);
                 }
-            }
-            if (search == -1) {
-                buffer[pointer] = reference[i];
-                fault++;
-                pointer = (pointer + 1) % frames;
-            }
-            for (int j = 0; j < frames; j++) {
-                mem_layout[i][j] = buffer[j];
+                s.add(q[i % n] = p);
+                i++;
+                f++;
+            } else {
+                h++;
             }
         }
-        for (int i = 0; i < frames; i++) {
-            for (int j = 0; j < ref_len; j++) {
-                System.out.printf("%3d ", mem_layout[j][i]);
-            }
-            System.out.println();
-        }
-        System.out.println("The number of Hits: " + hit);
-        System.out.println("Hit Ratio: " + (float) hit / ref_len);
-        System.out.println("The number of Faults: " + fault);
+        
+        double hitRatio = (double) h / (h + f);
+        System.out.println("Faults: " + f);
+        System.out.println("Hits: " + h);
+        System.out.println("Hit Ratio: " + hitRatio);
     }
 }
