@@ -1,49 +1,39 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Stack;
+import java.util.*;
 
 public class lifo {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int frames, hit = 0, fault = 0, ref_len;
-        int reference[];
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        // Prompt the user for the number of frames
+        System.out.print("Enter the number of frames: ");
+        int n = sc.nextInt();
+        
+        // Initialize variables
+        int p, i = 0, f = 0, h = 0;
+        int[] q = new int[n];
         Stack<Integer> stack = new Stack<>();
         
-        System.out.println("Please enter the number of Frames:");
-        frames = Integer.parseInt(br.readLine());
-        System.out.println("Please enter the length of the Reference string:");
-        ref_len = Integer.parseInt(br.readLine());
-        reference = new int[ref_len];
-
-        System.out.println("Please enter the reference string:");
-        for (int i = 0; i < ref_len; i++) {
-            reference[i] = Integer.parseInt(br.readLine());
-        }
-
-        System.out.println();
+        // Prompt the user for the reference string
+        System.out.println("Enter the reference string (enter -1 to stop):");
         
-        for (int i = 0; i < ref_len; i++) {
-            if (stack.contains(reference[i])) {
-                hit++;
-                stack.removeElement(reference[i]);
-            } else {
-                fault++;
-                if (stack.size() == frames) {
-                    stack.pop();
+        // Read reference string until the user enters -1
+        while ((p = sc.nextInt()) != -1) {
+            if (!stack.contains(p)) {
+                if (stack.size() == n) {
+                    int removedPage = stack.pop();
+                    f++;
                 }
+                stack.push(p);
+            } else {
+                stack.removeElement(p);
+                stack.push(p);
+                h++;
             }
-            stack.push(reference[i]);
-            
-            System.out.print("Frames: ");
-            for (Integer page : stack) {
-                System.out.print(page + " ");
-            }
-            System.out.println();
         }
-
-        System.out.println("The number of Hits: " + hit);
-        System.out.println("Hit Ratio: " + (float) hit / ref_len);
-        System.out.println("The number of Faults: " + fault);
+        
+        double hitRatio = (double) h / (h + f);
+        System.out.println("Faults: " + f);
+        System.out.println("Hits: " + h);
+        System.out.println("Hit Ratio: " + hitRatio);
     }
 }
