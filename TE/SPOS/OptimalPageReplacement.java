@@ -1,58 +1,51 @@
 import java.util.*;
 
-public class OptimalPageReplacement {
-    public static void main(String[] args) {
-        int n = 3; // Number of frames
-        int[] referenceString = {7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1}; // Predefined reference string
-        List<Integer> frames = new ArrayList<>();
-        Queue<Integer> remainingReferences = new LinkedList<>();
-        for (int page : referenceString) {
-            remainingReferences.add(page);
-        }
+class OptimalPageReplacement {
+    static void optimalPage(int[] pg, int fn) {
+        List<Integer> fr = new ArrayList<>();
+        int hit = 0;
 
-        int page, faults = 0, hits = 0;
-
-        while (!remainingReferences.isEmpty()) {
-            page = remainingReferences.poll();
-            if (!frames.contains(page)) {
-                faults++;
-                if (frames.size() == n) {
-                    int farthest = -1;
-                    int index = -1;
-                    for (int i = 0; i < n; i++) {
-                        int nextPageIndex = findNextIndex(remainingReferences, frames.get(i));
-                        if (nextPageIndex == -1) {
-                            index = i;
-                            break;
-                        }
-                        if (nextPageIndex > farthest) {
-                            farthest = nextPageIndex;
-                            index = i;
-                        }
-                    }
-                    frames.set(index, page);
-                } else {
-                    frames.add(page);
-                }
+        for (int i = 0; i < pg.length; i++) {
+            if (fr.contains(pg[i])) {
+                hit++;
             } else {
-                hits++;
+                if (fr.size() < fn) {
+                    fr.add(pg[i]);
+                } else {
+                    int replaceIndex = predict(pg, fr, i + 1);
+                    fr.set(replaceIndex, pg[i]);
+                }
             }
         }
 
-        double hitRatio = (double) hits / (hits + faults);
-        System.out.println("Faults: " + faults);
-        System.out.println("Hits: " + hits);
-        System.out.println("Hit Ratio: " + hitRatio);
+        System.out.println("No. of hits = " + hit);
+        System.out.println("No. of misses = " + (pg.length - hit));
     }
 
-    private static int findNextIndex(Queue<Integer> queue, int element) {
-        int index = 0;
-        for (int item : queue) {
-            if (item == element) {
-                return index;
+    static int predict(int[] pg, List<Integer> fr, int index) {
+        int farthest = -1;
+        int res = -1;
+        for (int i = 0; i < fr.size(); i++) {
+            int j;
+            for (j = index; j < pg.length; j++) {
+                if (fr.get(i) == pg[j]) {
+                    if (j > farthest) {
+                        farthest = j;
+                        res = i;
+                    }
+                    break;
+                }
             }
-            index++;
+            if (j == pg.length) {
+                return i;
+            }
         }
-        return -1;
+        return (res == -1) ? 0 : res;
+    }
+
+    public static void main(String[] args) {
+        int pg[] = { 7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2 };
+        int fn = 4;
+        optimalPage(pg, fn);
     }
 }
