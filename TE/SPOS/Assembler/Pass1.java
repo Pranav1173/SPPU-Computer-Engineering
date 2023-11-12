@@ -1,103 +1,71 @@
-import java.io.*;
+import java.util.*;
 
 class Pass1 {
-    public static void main(String[] args) throws Exception {
-        FileReader fileReader = new FileReader("C:\\Users\\prana\\Java\\Input.txt");
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        String line;
-        int lineCount = 0, locationCounter = 0, symTabLine = 0, opTabLine = 0, litTabLine = 0, poolTabLine = 0;
-        final int MAX = 100;
-        String[][] symbolTable = new String[MAX][3];
-        String[][] opCodeTable = new String[MAX][3];
-        String[][] literalTable = new String[MAX][2];
-        int[] poolTable = new int[MAX];
-        int literalTableAddress = 0;
+    public static void main(String[] args) {
+        String[] code = {
+            "START 100",
+            "MOVER AREG,B",
+            "ADD BREG,='6'",
+            "MOVEM AREG,A",
+            "SUB CREG,='1'",
+            "LTORG",
+            "ADD DREG,='5'",
+            "X DS 1",
+            "LTORG",
+            "SUB AREG,='1'",
+            "A DS 1",
+            "B DC 1",
+            "C DC 1",
+            "END"
+        };
 
-        while ((line = bufferedReader.readLine()) != null) {
-            String[] tokens = line.split("\t");
-            if (lineCount == 0) {
-                locationCounter = Integer.parseInt(tokens[1]);
-                for (String token : tokens)
-                    System.out.print(token + "\t");
-                System.out.println();
-            } else {
-                for (String token : tokens)
-                    System.out.print(token + "\t");
-                System.out.println();
-                if (!tokens[0].equals("")) {
-                    symbolTable[symTabLine][0] = tokens[0];
-                    symbolTable[symTabLine][1] = Integer.toString(locationCounter);
-                    symbolTable[symTabLine][2] = "1";
-                    symTabLine++;
-                } else if (tokens[1].equalsIgnoreCase("DS") || tokens[1].equalsIgnoreCase("DC")) {
-                    symbolTable[symTabLine][0] = tokens[0];
-                    symbolTable[symTabLine][1] = Integer.toString(locationCounter);
-                    symbolTable[symTabLine][2] = "1";
-                    symTabLine++;
-                }
-                if (tokens.length == 3 && tokens[2].charAt(0) == '=') {
-                    literalTable[litTabLine][0] = tokens[2];
-                    literalTable[litTabLine][1] = Integer.toString(locationCounter);
-                    litTabLine++;
-                } else if (tokens[1] != null) {
-                    opCodeTable[opTabLine][0] = tokens[1];
-                    if (tokens[1].equalsIgnoreCase("START") || tokens[1].equalsIgnoreCase("END")
-                            || tokens[1].equalsIgnoreCase("ORIGIN") || tokens[1].equalsIgnoreCase("EQU")
-                            || tokens[1].equalsIgnoreCase("LTORG")) {
-                        opCodeTable[opTabLine][1] = "AD";
-                        opCodeTable[opTabLine][2] = "R11";
-                    } else if (tokens[1].equalsIgnoreCase("DS") || tokens[1].equalsIgnoreCase("DC")) {
-                        opCodeTable[opTabLine][1] = "DL";
-                        opCodeTable[opTabLine][2] = "R7";
-                    } else {
-                        opCodeTable[opTabLine][1] = "IS";
-                        opCodeTable[opTabLine][2] = "(04,1)";
+        generateTables(code);
+    }
+    
+    static void generateTables(String[] code) {
+        Map<String, Integer> symbolTable = new HashMap<>();
+        Map<String, Integer> literalTable = new HashMap<>();
+        int address = 0;
+        int startAddress = Integer.parseInt(code[0].split("\\s+")[1]);
+        address = startAddress;
+
+        for (String line : code) {
+            String[] tokens = line.split("\\s+");
+
+            if (tokens.length > 1) {
+                String token = tokens[1].trim();
+                String symbol = tokens[0].trim();
+
+                if (token.equals("DS") || token.equals("DC")) {
+                    if (!symbolTable.containsKey(symbol)) {
+                        symbolTable.put(symbol, address);
                     }
-                    opTabLine++;
                 }
             }
-            lineCount++;
-            locationCounter++;
-        }
-        System.out.println(" SYMBOL TABLE ");
-        System.out.println("--------------------------");
-        System.out.println("SYMBOL\tADDRESS\tLENGTH");
-        System.out.println("--------------------------");
-        for (int i = 0; i < symTabLine; i++)
-            System.out.println(symbolTable[i][0] + "\t" + symbolTable[i][1] + "\t" + symbolTable[i][2]);
-        System.out.println("--------------------------");
-        System.out.println(" OPCODE TABLE ");
-        System.out.println("----------------------------");
-        System.out.println("MNEMONIC\tCLASS\tINFO");
-        System.out.println("----------------------------");
-        for (int i = 0; i < opTabLine; i++)
-            System.out.println(opCodeTable[i][0] + "\t\t" + opCodeTable[i][1] + "\t" + opCodeTable[i][2]);
-        System.out.println("----------------------------");
-        System.out.println(" LITERAL TABLE ");
-        System.out.println("-----------------");
-        System.out.println("LITERAL\tADDRESS");
-        System.out.println("-----------------");
-        for (int i = 0; i < litTabLine; i++)
-            System.out.println(literalTable[i][0] + "\t" + literalTable[i][1]);
-        System.out.println("------------------");
-        for (int i = 0; i < litTabLine; i++) {
-            if (literalTable[i][0] != null && literalTable[i + 1][0] != null) {
-                if (i == 0) {
-                    poolTable[poolTabLine] = i + 1;
-                    poolTabLine++;
-                } else if (Integer.parseInt(literalTable[i][1]) < (Integer.parseInt(literalTable[i + 1][1]) - 1)) {
-                    poolTable[poolTabLine] = i + 2;
-                    poolTabLine++;
+
+            if (line.contains("=")) {
+                String literal = line.substring(line.indexOf("='") + 2, line.lastIndexOf("'"));
+                if (!literalTable.containsKey(literal)) {
+                    literalTable.put(literal, address);
                 }
             }
+            if (line.contains("LTORG")) {
+                address--;
+            }
+
+            address++;
         }
-        System.out.println(" POOL TABLE ");
-        System.out.println("-----------------");
-        System.out.println("LITERAL NUMBER");
-        System.out.println("-----------------");
-        for (int i = 0; i < poolTabLine; i++)
-            System.out.println(poolTable[i]);
-        System.out.println("------------------");
-        bufferedReader.close();
+
+        System.out.println("\nSYMBOL TABLE");
+        System.out.println("Symbol\t\tAddress\n");
+        for (Map.Entry<String, Integer> entry : symbolTable.entrySet()) {
+            System.out.println(entry.getKey() + "\t\t" + entry.getValue());
+        }
+
+        System.out.println("\nLITERAL TABLE");
+        System.out.println("Literal\t\tAddress");
+        for (Map.Entry<String, Integer> entry : literalTable.entrySet()) {
+            System.out.println(entry.getKey() + "\t\t" + entry.getValue());
+        }
     }
 }
