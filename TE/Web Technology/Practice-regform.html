@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <B><h1 style="color:rgb(221, 16, 132);text-align:center;">Student Registration Form</h1></B>
+    <HR style=" height: 5px;  color: black;">
+    <link rel="stylesheet" href="design.css">
+</head>
+<body>
+    <div class="container">
+    <form>
+        <boder>
+        <label for="fname">First name:</label><br>
+        <input type="text" id="fname" name="fname"><br>
+        <p></p>
+        <label for="lname">Last name:</label><br>
+        <input type="text" id="lname" name="lname">
+        <p></p>
+        <label for="date of birth">Birth date: </label><br>
+        <input type="date" id="dob" name="dob"><br>
+        <p></p>
+        <label for="email id">Email ID: </LABEL><br>
+        <input type="text" id="mid" name="mid"><br>
+        <p></p>
+        <label for="Mobile Number">Mobile Number: </label><br>
+        <input type="number" id="mobno" name="mobno"><br>
+        <p></p>
+        <label for="Gender">Gender: </label><br>
+        <label for="mf">Male </label>
+        <input type="radio" id="gender" name="gender">
+        <label for="mf">Female </LABEL>
+        <input type="radio" id="gender" name="gender"><br>
+        <p></p>
+        <label for="Address">Address: </LABEL><br>
+        <input type="text" id="addr" name="address"><br>
+        <p></p>
+        <label for="Address">City:</label><br>
+        <input type="text" id="addr" name="City">
+        <p></p>
+        <label for="Address">Pincode:</label><br>
+        <input type="number" id="addr" name="pin">
+        <p></p>
+        <label for="Address">State:</label><br>
+        <input type="text" id="addr" name="state">
+        <p></p>
+        <label for="Address">Country:</label><br>
+        <input type="text" id="addr" name="Country">
+        <p></p>
+        <label for="hobbies">Hobbies:</label><br>
+        <label for="drawing">Drawing</label>
+        <input type="checkbox" id="hobby" name="drawing">
+        <label for="drawing">Dancing</label> 
+        <input type="checkbox" id="hobby" name="dancing">
+        <label for="singing">Singing</label> 
+        <input type="checkbox" id="hobby" name="singing">
+        <label for="other">Other</label> 
+        <input type="text" id="hobby" name="order">
+        <p></p>
+        <label for="Qualification">Qualification: </label>
+        <style>
+            table, th, td {border:1px solid black;}
+        </style>
+        <table class = "tab1" style="width:100%">
+        <tr>
+            <th>Examination</th>
+            <th>Board</th>
+            <th>Percentage</th>
+            <th>Year of Passing</th>
+        </tr>
+        <tr>
+            <td>Class X</td>
+            <td>
+                <input type="text" id="classX" name="classX">
+            </td>
+            <td>
+                <input type="number" id="classX" name="classX" min = "0" max = "100">
+            </td>
+            <td>
+                <input type="number" id="classX" name="classX" min = "0" max = "100">
+            </td>
+        </tr>
+        <tr>
+            <td>Class XII</td>
+            <td>
+                <input type="text" id="classXII" name="classXII">
+            </td>
+            <td>
+                <input type="number" id="classXII" name="classXII" min = "0" max = "100">
+            </td>
+            <td>
+                <input type="number" id="classXII" name="classXII" min = "0" max = "100">
+            </td>
+        </tr>
+        <tr>
+            <td>Graduation</td>
+            <td>
+                <input type="text" id="grad" name="grad">
+            </td>
+            <td>
+                <input type="number" id="grad" name="grad" min = "0" max = "100">
+            </td>
+            <td>
+                <input type="number" id="grad" name="grad" min = "0" max = "100">
+            </td>
+        </tr>
+        </table>
+        <p></p>
+        <label for="courses">Course Applied for:</label><br>
+        <label for="crs">BCA</label>
+        <input type="radio" id="crs1" name="crs1">
+        <label for="dcrs">B.Com</label> 
+        <input type="radio" id="crs1" name="crs1">
+        <label for="crs">B.Sc</label> 
+        <input type="radio" id="crs1" name="crs1">
+        <label for="crs">B.A</label> 
+        <input type="radio" id="crs1" name="crs1">
+        <p></p>
+        <input type ="submit" value = "Submit">
+        <input type ="reset" value = "Reset">
+    </form>
+    </div>
+</body>
+</html>
